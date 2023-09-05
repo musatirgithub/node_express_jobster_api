@@ -1,7 +1,7 @@
 require('dotenv').config();
 require('express-async-errors');
 
-const path = require('path')
+const path = require('path');
 
 // extra security packages
 const helmet = require('helmet');
@@ -20,8 +20,9 @@ const jobsRouter = require('./routes/jobs');
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 
-app.use(express.static(path.resolve(__dirname, './client/build')))
+app.set('trust proxy', 1);
 
+app.use(express.static(path.resolve(__dirname, './client/build')));
 app.use(express.json());
 app.use(helmet());
 app.use(xss());
@@ -32,7 +33,7 @@ app.use('/api/v1/jobs', authenticateUser, jobsRouter);
 
 // all the routes except api are being directed to frontend
 app.get('*', (req,res)=>{
-  res.sendFile(__dirname, './client/build', 'index.html')
+  res.sendFile(__dirname, './client/build/', 'index.html')
 })
 
 app.use(notFoundMiddleware);
