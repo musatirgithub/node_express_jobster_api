@@ -30,6 +30,7 @@ app.use(xss());
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/jobs', authenticateUser, jobsRouter);
 
+// all the routes except api are being directed to frontend
 app.get('*', (req,res)=>{
   res.sendFile(__dirname, './client/build', 'index.html')
 })
