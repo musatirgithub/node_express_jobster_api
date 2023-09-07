@@ -28,25 +28,30 @@ const login = async (req, res) => {
 }
 
 const updateUser = async(req,res)=>{
-  const {email, name, location, lastName} = req.body;
-  
-  if(!email || !name || !location || !lastName){
-    throw new BadRequestError('Please provide email, name, location, lastName ')
+  const { email, name, lastName, location } = req.body;
+  if (!email || !name || !lastName || !location) {
+    throw new BadRequestError('Please provide all values');
   }
+  const user = await User.findOne({ _id: req.user.userId });
 
-  const user = await User.findOne({_id:req.user.userId})
-  
   user.email = email;
   user.name = name;
-  user.location = location;
   user.lastName = lastName;
+  user.location = location;
 
-  await user.save()
+  await user.save();
 
-  const token = user.createJWT()
+  const token = user.createJWT();
 
-  res.status(StatusCodes.OK).json({name:user.name, email:user.email, lastName:user.lastName, location:user.location, token})
-
+  res.status(StatusCodes.OK).json({
+    user: {
+      email: user.email,
+      lastName: user.lastName,
+      location: user.location,
+      name: user.name,
+      token,
+    },
+  });
 }
 
 module.exports = {
