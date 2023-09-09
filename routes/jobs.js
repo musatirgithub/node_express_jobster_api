@@ -8,9 +8,12 @@ const {
   getAllJobs,
   updateJob,
   getJob,
+  showStats,
 } = require('../controllers/jobs')
 
-router.post('/', testUser,createJob).get('/', getAllJobs)
+router.route('/').post(testUser,createJob).get(getAllJobs)
+
+router.route('/stats'),get(showStats)
 
 router.get('/:id',getJob).delete('/:id',testUser, deleteJob).patch('/:id',testUser, updateJob)
 
